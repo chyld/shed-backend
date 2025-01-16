@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Shed {
+  id              String      @id @default(cuid())
+  title           String
+  description     String
+  isNew           Boolean     @default(true)
+  isSold          Boolean     @default(false)
+  inventoryNumber String
+  basePrice       Int
+  optionsPrice    Int
+  salePercent     Int         @default(0)
+  sizeWidth       Int
+  sizeLength      Int
+  colorRoof       String
+  colorSiding     String
+  colorTrim       String
+  shedType        String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  media           ShedMedia[]
+}
+
+model ShedMedia {
+  id        String   @id @default(cuid())
+  path      String
+  isPrimary Boolean  @default(false)
+  isPhoto   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  shed   Shed   @relation(fields: [shedId], references: [id], onDelete: Cascade)
+  shedId String
+
+  @@index([shedId])
+}
