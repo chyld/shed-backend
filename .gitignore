@@ -5,3 +5,4 @@
 /prisma/dev.db*
 /prisma/migrations
 /.cursorrules
+/public
