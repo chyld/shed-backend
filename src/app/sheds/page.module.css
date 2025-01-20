@@ -1,0 +1,128 @@
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.container h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.th {
+  background-color: #34495e;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  color: #2c3e50;
+  transition: background-color 0.2s ease;
+}
+
+.tableRow {
+  transition: background-color 0.2s ease;
+}
+
+.tableRow:hover .td {
+  background-color: #f5f9ff;
+}
+
+.tableRow:last-child .td {
+  border-bottom: none;
+}
+
+.newBadge {
+  background-color: #2ecc71;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-left: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(46, 204, 113, 0.2);
+}
+
+.soldBadge {
+  background-color: #e74c3c;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-left: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+}
+
+.description {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  display: block;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .th,
+  .td {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+.priceCell {
+  font-family: monospace;
+  font-weight: 600;
+  color: #2980b9;
+}
+
+.salePercentage {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.colorsCell {
+  line-height: 1.6;
+  font-size: 0.9rem;
+}

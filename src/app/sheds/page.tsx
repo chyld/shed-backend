@@ -1,4 +1,4 @@
-import styles from "./ShedList.module.css";
+import styles from "./page.module.css";
 import prisma from "@/lib/prisma";
 
 export default async function ShedListPage() {
@@ -9,73 +9,45 @@ export default async function ShedListPage() {
   });
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Shed Inventory</h1>
       <div>
-        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+        <table className={styles.table}>
           <thead>
-            <tr>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Title</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Inventory #</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Size</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Base Price</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Options Price</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Total Price</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Sale %</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Sale Price</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Type</th>
-              <th style={{ border: "1px solid #ccc", padding: "8px" }}>Colors</th>
+            <tr className={styles.tableRow}>
+              <th className={styles.th}>Title</th>
+              <th className={styles.th}>Inventory #</th>
+              <th className={styles.th}>Size</th>
+              <th className={styles.th}>Base Price</th>
+              <th className={styles.th}>Options Price</th>
+              <th className={styles.th}>Total Price</th>
+              <th className={styles.th}>Sale %</th>
+              <th className={styles.th}>Sale Price</th>
+              <th className={styles.th}>Type</th>
+              <th className={styles.th}>Colors</th>
             </tr>
           </thead>
           <tbody>
             {sheds.map((shed) => (
-              <tr key={shed.id}>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+              <tr key={shed.id} className={styles.tableRow}>
+                <td className={styles.td}>
                   {shed.title}
-                  {shed.isNew && (
-                    <span
-                      style={{
-                        backgroundColor: "#4CAF50",
-                        color: "white",
-                        padding: "2px 6px",
-                        borderRadius: "4px",
-                        fontSize: "0.8em",
-                        marginLeft: "8px",
-                      }}
-                    >
-                      New
-                    </span>
-                  )}
-                  {shed.isSold && (
-                    <span
-                      style={{
-                        backgroundColor: "#DC3545",
-                        color: "white",
-                        padding: "2px 6px",
-                        borderRadius: "4px",
-                        fontSize: "0.8em",
-                        marginLeft: "8px",
-                      }}
-                    >
-                      Sold
-                    </span>
-                  )}
+                  {shed.isNew && <span className={styles.newBadge}>New</span>}
+                  {shed.isSold && <span className={styles.soldBadge}>Sold</span>}
                   <br />
-                  <span style={{ fontSize: "0.9em", color: "#666" }}>{shed.description}</span>
+                  <span className={styles.description}>{shed.description}</span>
                 </td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>{shed.inventoryNumber}</td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>{`${shed.sizeWidth}x${shed.sizeLength}`}</td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>${(shed.basePrice / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>${(shed.optionsPrice / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                  ${((shed.basePrice + shed.optionsPrice) / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>{shed.salePercent}%</td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                <td className={styles.td}>{shed.inventoryNumber}</td>
+                <td className={styles.td}>{`${shed.sizeWidth}x${shed.sizeLength}`}</td>
+                <td className={`${styles.td} ${styles.priceCell}`}>${(shed.basePrice / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                <td className={`${styles.td} ${styles.priceCell}`}>${(shed.optionsPrice / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                <td className={`${styles.td} ${styles.priceCell}`}>${((shed.basePrice + shed.optionsPrice) / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                <td className={`${styles.td} ${styles.salePercentage}`}>{shed.salePercent}%</td>
+                <td className={`${styles.td} ${styles.priceCell}`}>
                   ${(((shed.basePrice + shed.optionsPrice) * (100 - shed.salePercent)) / 100 / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>{shed.shedType}</td>
-                <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                <td className={styles.td}>{shed.shedType}</td>
+                <td className={`${styles.td} ${styles.colorsCell}`}>
                   Roof: {shed.colorRoof}
                   <br />
                   Siding: {shed.colorSiding}
