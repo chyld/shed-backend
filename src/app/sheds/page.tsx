@@ -1,5 +1,7 @@
 import styles from "./page.module.css";
 import prisma from "@/lib/prisma";
+import Link from "next/link";
+import { getServerSession } from "next-auth";
 
 export default async function ShedListPage() {
   const sheds = await prisma.shed.findMany({
@@ -7,9 +9,26 @@ export default async function ShedListPage() {
       createdAt: "desc",
     },
   });
+  const session = await getServerSession();
+  const isLoggedIn = !!session;
 
   return (
     <div className={styles.container}>
+      <div style={{ marginBottom: "20px" }}>
+        <Link
+          href="/sheds/new"
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            textDecoration: "none",
+            borderRadius: "4px",
+            display: "inline-block",
+          }}
+        >
+          Create New Shed
+        </Link>
+      </div>
       <h1>Shed Inventory</h1>
       <div>
         <table className={styles.table}>
@@ -29,11 +48,28 @@ export default async function ShedListPage() {
           </thead>
           <tbody>
             {sheds.map((shed) => (
-              <tr key={shed.id} className={styles.tableRow}>
+              <tr key={shed.id} className={`${styles.tableRow} ${shed.isDeleted ? styles.deletedRow : ""}`}>
                 <td className={styles.td}>
-                  {shed.title}
-                  {shed.isNew && <span className={styles.newBadge}>New</span>}
-                  {shed.isSold && <span className={styles.soldBadge}>Sold</span>}
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    {isLoggedIn && (
+                      <Link
+                        href={`/sheds/edit/${shed.id}`}
+                        style={{
+                          padding: "2px 6px",
+                          backgroundColor: "#2196F3",
+                          color: "white",
+                          textDecoration: "none",
+                          borderRadius: "4px",
+                          fontSize: "0.8em",
+                        }}
+                      >
+                        Edit
+                      </Link>
+                    )}
+                    {shed.title}
+                    {shed.isNew && <span className={styles.newBadge}>New</span>}
+                    {shed.isSold && <span className={styles.soldBadge}>Sold</span>}
+                  </div>
                   <br />
                   <span className={styles.description}>{shed.description}</span>
                 </td>
