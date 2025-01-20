@@ -2,5 +2,5 @@
 
 ./scripts/clean.sh
 ./scripts/populate.sh
-
-echo "Full setup complete!"
+echo "Database cleaned and populated!"
+npx prisma studio
