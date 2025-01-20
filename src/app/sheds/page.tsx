@@ -8,6 +8,13 @@ export default async function ShedListPage() {
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      media: {
+        where: {
+          isPrimary: true,
+        },
+      },
+    },
   });
   const session = await getServerSession();
   const isLoggedIn = !!session;
@@ -51,24 +58,65 @@ export default async function ShedListPage() {
               <tr key={shed.id} className={`${styles.tableRow} ${shed.isDeleted ? styles.deletedRow : ""}`}>
                 <td className={styles.td}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    {isLoggedIn && (
-                      <Link
-                        href={`/sheds/edit/${shed.id}`}
+                    {shed.media[0] && (
+                      <div style={{ width: "50px", height: "50px", flexShrink: 0 }}>
+                        {shed.media[0].isPhoto ? (
+                          <img
+                            src={shed.media[0].path}
+                            alt="Primary media"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "4px",
+                            }}
+                          />
+                        ) : (
+                          <video
+                            src={shed.media[0].path}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "4px",
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+                    <div>
+                      {isLoggedIn && (
+                        <Link
+                          href={`/sheds/edit/${shed.id}`}
+                          style={{
+                            padding: "2px 6px",
+                            backgroundColor: "#2196F3",
+                            color: "white",
+                            textDecoration: "none",
+                            borderRadius: "4px",
+                            fontSize: "0.8em",
+                          }}
+                        >
+                          Edit
+                        </Link>
+                      )}
+                      <a
+                        href={`/sheds/media/${shed.id}`}
                         style={{
                           padding: "2px 6px",
-                          backgroundColor: "#2196F3",
+                          backgroundColor: "#007bff",
                           color: "white",
                           textDecoration: "none",
                           borderRadius: "4px",
                           fontSize: "0.8em",
                         }}
                       >
-                        Edit
-                      </Link>
-                    )}
-                    {shed.title}
-                    {shed.isNew && <span className={styles.newBadge}>New</span>}
-                    {shed.isSold && <span className={styles.soldBadge}>Sold</span>}
+                        Media
+                      </a>
+                      {shed.title}
+                      {shed.isNew && <span className={styles.newBadge}>New</span>}
+                      {shed.isSold && <span className={styles.soldBadge}>Sold</span>}
+                    </div>
                   </div>
                   <br />
                   <span className={styles.description}>{shed.description}</span>
