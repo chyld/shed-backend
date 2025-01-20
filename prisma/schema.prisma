@@ -26,6 +26,7 @@ model Shed {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
   media           ShedMedia[]
+  isDeleted       Boolean     @default(false)
 }
 
 model ShedMedia {
@@ -34,6 +35,7 @@ model ShedMedia {
   isPrimary Boolean  @default(false)
   isPhoto   Boolean  @default(false)
   createdAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
 
   shed   Shed   @relation(fields: [shedId], references: [id], onDelete: Cascade)
   shedId String
