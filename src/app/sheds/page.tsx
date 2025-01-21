@@ -3,8 +3,14 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 
-export default async function ShedListPage() {
+export default async function ShedListPage({ searchParams }: { searchParams: { showSold?: string } }) {
+  const params = await Promise.resolve(searchParams);
+  const showSold = params.showSold === "true";
+
   const sheds = await prisma.shed.findMany({
+    where: {
+      isSold: showSold ? undefined : false, // Only filter if not showing sold items
+    },
     include: {
       media: {
         where: {
@@ -22,7 +28,7 @@ export default async function ShedListPage() {
 
   return (
     <div className={styles.container}>
-      <div style={{ marginBottom: "20px" }}>
+      <div style={{ marginBottom: "20px", display: "flex", gap: "20px", alignItems: "center" }}>
         <Link
           href="/sheds/new"
           style={{
@@ -36,6 +42,24 @@ export default async function ShedListPage() {
         >
           Create New Shed
         </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <Link
+            href={`/sheds?showSold=${!showSold}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            <input type="checkbox" checked={showSold} readOnly style={{ cursor: "pointer" }} />
+            <span>Show Sold Items</span>
+          </Link>
+        </div>
       </div>
       <h1>Shed Inventory</h1>
       <div>
