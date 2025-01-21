@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "./ShedForm.module.css";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 interface ShedFormProps {
   initialData?: {
@@ -28,78 +29,71 @@ interface ShedFormProps {
 }
 
 export default function ShedForm({ initialData, onSubmit, isLoading }: ShedFormProps) {
-  const [formData, setFormData] = useState({
-    title: initialData?.title || "",
-    description: initialData?.description || "",
-    isNew: initialData?.isNew ?? true,
-    isSold: initialData?.isSold ?? false,
-    isDeleted: initialData?.isDeleted ?? false,
-    inventoryNumber: initialData?.inventoryNumber || "",
-    basePrice: initialData?.basePrice || 0,
-    optionsPrice: initialData?.optionsPrice || 0,
-    salePercent: initialData?.salePercent || 0,
-    sizeWidth: initialData?.sizeWidth || 0,
-    sizeLength: initialData?.sizeLength || 0,
-    colorRoof: initialData?.colorRoof || "",
-    colorSiding: initialData?.colorSiding || "",
-    colorTrim: initialData?.colorTrim || "",
-    shedType: initialData?.shedType || "",
-  });
-
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm({
+    defaultValues: {
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      isNew: initialData?.isNew ?? true,
+      isSold: initialData?.isSold ?? false,
+      isDeleted: initialData?.isDeleted ?? false,
+      inventoryNumber: initialData?.inventoryNumber || "",
+      basePrice: initialData ? (initialData.basePrice / 100).toFixed(2) : "",
+      optionsPrice: initialData ? (initialData.optionsPrice / 100).toFixed(2) : "",
+      salePercent: initialData?.salePercent || 0,
+      sizeWidth: initialData?.sizeWidth || 0,
+      sizeLength: initialData?.sizeLength || 0,
+      colorRoof: initialData?.colorRoof || "",
+      colorSiding: initialData?.colorSiding || "",
+      colorTrim: initialData?.colorTrim || "",
+      shedType: initialData?.shedType || "",
+    },
+  });
 
-    try {
-      await onSubmit(formData);
-
-      // After successful save, redirect to sheds list
-      router.push("/sheds");
-    } catch (error) {
-      console.error("Error saving shed:", error);
-      // ... error handling ...
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : ["basePrice", "optionsPrice", "salePercent", "sizeWidth", "sizeLength"].includes(name) ? parseInt(value) : value,
-    }));
+  const onSubmitForm = async (data: any) => {
+    const formData = {
+      ...data,
+      basePrice: Math.round(parseFloat(data.basePrice) * 100),
+      optionsPrice: Math.round(parseFloat(data.optionsPrice) * 100),
+      salePercent: parseInt(data.salePercent),
+      sizeWidth: parseInt(data.sizeWidth),
+      sizeLength: parseInt(data.sizeLength),
+    };
+    await onSubmit(formData);
+    router.push("/sheds");
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={form.handleSubmit(onSubmitForm)} className={styles.form}>
       <div className={styles.formGroup}>
         <label htmlFor="title">Title:</label>
-        <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />
+        <input {...form.register("title", { required: true })} type="text" />
       </div>
 
       <div className={styles.formGroup}>
         <label htmlFor="description">Description:</label>
-        <textarea id="description" name="description" value={formData.description} onChange={handleChange} required />
+        <textarea {...form.register("description", { required: true })} />
       </div>
 
       <div className={styles.formGroup}>
         <label htmlFor="inventoryNumber">Inventory Number:</label>
-        <input type="text" id="inventoryNumber" name="inventoryNumber" value={formData.inventoryNumber} onChange={handleChange} required />
+        <input {...form.register("inventoryNumber", { required: true })} type="text" />
       </div>
 
       <div className={styles.checkboxGroup}>
         <label>
-          <input type="checkbox" name="isNew" checked={formData.isNew} onChange={handleChange} />
+          <input type="checkbox" {...form.register("isNew")} />
           New Item
         </label>
 
         <label>
-          <input type="checkbox" name="isSold" checked={formData.isSold} onChange={handleChange} />
+          <input type="checkbox" {...form.register("isSold")} />
           Sold
         </label>
 
         <label>
-          <input type="checkbox" name="isDeleted" checked={formData.isDeleted} onChange={handleChange} />
+          <input type="checkbox" {...form.register("isDeleted")} />
           Deleted
         </label>
       </div>
@@ -107,52 +101,82 @@ export default function ShedForm({ initialData, onSubmit, isLoading }: ShedFormP
       <div className={styles.priceGroup}>
         <div className={styles.formGroup}>
           <label htmlFor="basePrice">Base Price ($):</label>
-          <input type="number" id="basePrice" name="basePrice" value={formData.basePrice} onChange={handleChange} min="0" required />
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            {...form.register("basePrice", {
+              required: "Base price is required",
+              validate: (value: string) => {
+                const num = parseFloat(value);
+                if (isNaN(num)) return "Please enter a valid price";
+                if (num < 0) return "Price cannot be negative";
+                return true;
+              },
+            })}
+            className="form-control"
+          />
+          {form.formState.errors.basePrice && <span className="error">{form.formState.errors.basePrice.message}</span>}
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="optionsPrice">Options Price ($):</label>
-          <input type="number" id="optionsPrice" name="optionsPrice" value={formData.optionsPrice} onChange={handleChange} min="0" required />
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            {...form.register("optionsPrice", {
+              required: "Options price is required",
+              validate: (value: string) => {
+                const num = parseFloat(value);
+                if (isNaN(num)) return "Please enter a valid price";
+                if (num < 0) return "Price cannot be negative";
+                return true;
+              },
+            })}
+            className="form-control"
+          />
+          {form.formState.errors.optionsPrice && <span className="error">{form.formState.errors.optionsPrice.message}</span>}
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="salePercent">Sale Percentage (%):</label>
-          <input type="number" id="salePercent" name="salePercent" value={formData.salePercent} onChange={handleChange} min="0" max="100" required />
+          <input type="number" min="0" max="100" {...form.register("salePercent", { required: true })} />
         </div>
       </div>
 
       <div className={styles.dimensions}>
         <div className={styles.formGroup}>
           <label htmlFor="sizeWidth">Width (ft):</label>
-          <input type="number" id="sizeWidth" name="sizeWidth" value={formData.sizeWidth} onChange={handleChange} min="0" required />
+          <input {...form.register("sizeWidth", { required: true })} type="number" min="0" />
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="sizeLength">Length (ft):</label>
-          <input type="number" id="sizeLength" name="sizeLength" value={formData.sizeLength} onChange={handleChange} min="0" required />
+          <input {...form.register("sizeLength", { required: true })} type="number" min="0" />
         </div>
       </div>
 
       <div className={styles.colorGroup}>
         <div className={styles.formGroup}>
           <label htmlFor="colorRoof">Roof Color:</label>
-          <input type="text" id="colorRoof" name="colorRoof" value={formData.colorRoof} onChange={handleChange} required />
+          <input {...form.register("colorRoof", { required: true })} type="text" />
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="colorSiding">Siding Color:</label>
-          <input type="text" id="colorSiding" name="colorSiding" value={formData.colorSiding} onChange={handleChange} required />
+          <input {...form.register("colorSiding", { required: true })} type="text" />
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="colorTrim">Trim Color:</label>
-          <input type="text" id="colorTrim" name="colorTrim" value={formData.colorTrim} onChange={handleChange} required />
+          <input {...form.register("colorTrim", { required: true })} type="text" />
         </div>
       </div>
 
       <div className={styles.formGroup}>
         <label htmlFor="shedType">Shed Type:</label>
-        <input type="text" id="shedType" name="shedType" value={formData.shedType} onChange={handleChange} required />
+        <input {...form.register("shedType", { required: true })} type="text" />
       </div>
 
       <button type="submit" className={styles.submitButton} disabled={isLoading}>
