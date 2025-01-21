@@ -37,7 +37,7 @@ export function NavBar() {
           Home
         </Link>
         <Link href="/sheds" style={linkStyle}>
-          Inventory
+          Shed Inventory
         </Link>
       </div>
       <div>

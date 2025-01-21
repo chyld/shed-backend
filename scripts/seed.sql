@@ -2,7 +2,7 @@
 INSERT INTO Shed (
   id, title, description, isNew, isSold, inventoryNumber,
   basePrice, optionsPrice, salePercent, sizeWidth, sizeLength,
-  colorRoof, colorSiding, colorTrim, shedType, createdAt, updatedAt
+  colorRoof, colorSiding, colorTrim, shedType, createdAt
 ) VALUES
   (
     'clh1234567890',
@@ -12,7 +12,7 @@ INSERT INTO Shed (
     1000000, 250000, 0, 10, 16,
     'Charcoal Gray', 'White', 'Black',
     'utility',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567891',
@@ -22,7 +22,7 @@ INSERT INTO Shed (
     1500000, 350000, 10, 10, 20,
     'Black', 'Cedar', 'White',
     'loftedbarn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567892',
@@ -32,7 +32,7 @@ INSERT INTO Shed (
     1100000, 300000, 0, 12, 24,
     'Red', 'Beige', 'White',
     'barn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567893',
@@ -42,7 +42,7 @@ INSERT INTO Shed (
     1300000, 280000, 0, 10, 20,
     'Dark Bronze', 'Natural Cedar', 'Black',
     'metal utility',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567894',
@@ -52,7 +52,7 @@ INSERT INTO Shed (
     1250000, 400000, 0, 12, 20,
     'Forest Green', 'Tan', 'White',
     'utility',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567895',
@@ -62,7 +62,7 @@ INSERT INTO Shed (
     1600000, 450000, 0, 10, 24,
     'Slate Gray', 'White Pine', 'Black',
     'loftedbarn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567896',
@@ -72,7 +72,7 @@ INSERT INTO Shed (
     1400000, 320000, 5, 12, 20,
     'Brown', 'Log Siding', 'Dark Brown',
     'barn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567897',
@@ -82,7 +82,7 @@ INSERT INTO Shed (
     1150000, 280000, 0, 10, 16,
     'Matte Black', 'Gray', 'White',
     'metal lofted',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567898',
@@ -92,7 +92,7 @@ INSERT INTO Shed (
     1350000, 300000, 0, 10, 20,
     'White', 'Light Gray', 'Black',
     'loftedbarn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567899',
@@ -102,7 +102,7 @@ INSERT INTO Shed (
     1450000, 350000, 0, 12, 24,
     'Burgundy', 'Beige', 'White',
     'cabin',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567900',
@@ -112,7 +112,7 @@ INSERT INTO Shed (
     950000, 200000, 0, 10, 16,
     'Green', 'White', 'Green',
     'garden',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567901',
@@ -122,7 +122,7 @@ INSERT INTO Shed (
     1300000, 400000, 0, 10, 20,
     'Navy Blue', 'White', 'Navy',
     'cabin',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567902',
@@ -132,7 +132,7 @@ INSERT INTO Shed (
     1100000, 250000, 0, 10, 16,
     'Dark Gray', 'Cedar', 'White',
     'loftedbarn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567903',
@@ -142,7 +142,7 @@ INSERT INTO Shed (
     1400000, 350000, 0, 12, 24,
     'Black', 'Metal Gray', 'Black',
     'barn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567904',
@@ -152,7 +152,7 @@ INSERT INTO Shed (
     1250000, 300000, 0, 10, 20,
     'Brown', 'Natural Wood', 'White',
     'cabin',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567905',
@@ -162,7 +162,7 @@ INSERT INTO Shed (
     1350000, 400000, 0, 12, 20,
     'Dark Green', 'Tan', 'Brown',
     'loftedbarn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567906',
@@ -172,7 +172,7 @@ INSERT INTO Shed (
     1200000, 280000, 0, 10, 16,
     'Light Gray', 'White', 'Black',
     'modern',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567907',
@@ -182,7 +182,7 @@ INSERT INTO Shed (
     1300000, 320000, 0, 10, 20,
     'Rustic Brown', 'Log Siding', 'Brown',
     'cabin',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567908',
@@ -192,7 +192,7 @@ INSERT INTO Shed (
     1450000, 350000, 0, 12, 24,
     'White', 'Gray', 'Black',
     'modern',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567909',
@@ -202,7 +202,7 @@ INSERT INTO Shed (
     1250000, 300000, 0, 10, 20,
     'Light Blue', 'White', 'Navy',
     'cottage',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567910',
@@ -212,7 +212,7 @@ INSERT INTO Shed (
     1150000, 280000, 0, 10, 16,
     'Charcoal', 'Light Gray', 'White',
     'metal lofted',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567911',
@@ -222,7 +222,7 @@ INSERT INTO Shed (
     1400000, 350000, 0, 12, 20,
     'Forest Green', 'Cedar', 'Black',
     'cabin',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567912',
@@ -232,7 +232,7 @@ INSERT INTO Shed (
     1300000, 320000, 0, 10, 20,
     'Terra Cotta', 'Adobe', 'Brown',
     'modern',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567913',
@@ -242,7 +242,7 @@ INSERT INTO Shed (
     1100000, 250000, 0, 10, 16,
     'Green', 'Natural Wood', 'Brown',
     'loftedbarn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567914',
@@ -252,7 +252,7 @@ INSERT INTO Shed (
     1400000, 350000, 0, 12, 24,
     'Classic Red', 'White', 'Black',
     'barn',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567915',
@@ -262,7 +262,7 @@ INSERT INTO Shed (
     1350000, 300000, 0, 10, 20,
     'Earth Brown', 'Tan', 'Dark Brown',
     'modern',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567916',
@@ -272,7 +272,7 @@ INSERT INTO Shed (
     1200000, 400000, 0, 10, 16,
     'Silver', 'White', 'Black',
     'metal lofted',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567917',
@@ -282,7 +282,7 @@ INSERT INTO Shed (
     1300000, 350000, 0, 12, 20,
     'Dark Red', 'Beige', 'White',
     'utility',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567918',
@@ -292,7 +292,7 @@ INSERT INTO Shed (
     1450000, 320000, 0, 10, 24,
     'Forest Green', 'Cedar', 'Brown',
     'cabin',
-    datetime('now'), datetime('now')
+    datetime('now')
   ),
   (
     'clh1234567919',
@@ -302,5 +302,5 @@ INSERT INTO Shed (
     1250000, 300000, 0, 10, 20,
     'Slate', 'White', 'Black',
     'loftedbarn',
-    datetime('now'), datetime('now')
+    datetime('now')
   );
