@@ -304,3 +304,110 @@ INSERT INTO Shed (
     'loftedbarn',
     datetime('now')
   );
+
+-- Insert sample trailers
+INSERT INTO Trailer (
+  id, title, description, isNew, isSold, modelNumber,
+  plateNumber, vin, price, salePercent, sizeWidth, sizeLength,
+  trailerType, createdAt
+) VALUES
+  (
+    'clt1234567890',
+    'Utility Trailer 5x8',
+    'Versatile utility trailer perfect for small loads and weekend projects. Features steel construction and treated wood floor.',
+    1, 0, 'UT-5X8-2024',
+    'ABC1234', '1HGCM82633A123456',
+    299500, 0, 5, 8,
+    'utility',
+    datetime('now')
+  ),
+  (
+    'clt1234567891',
+    'Car Hauler 7x16',
+    'Heavy-duty car hauler with reinforced frame and diamond plate steel deck.',
+    1, 0, 'CH-7X16-2024',
+    'XYZ5678', '2HGCM82633B123457',
+    549900, 0, 7, 16,
+    'car hauler',
+    datetime('now')
+  ),
+  (
+    'clt1234567892',
+    'Dump Trailer 6x10',
+    'Hydraulic dump trailer with dual rams and barn doors. Perfect for landscaping.',
+    1, 0, 'DT-6X10-2024',
+    'DEF9012', '3HGCM82633C123458',
+    649900, 5, 6, 10,
+    'dump',
+    datetime('now')
+  ),
+  (
+    'clt1234567893',
+    'Equipment Trailer 7x20',
+    'Heavy equipment trailer with fold-down ramps and 14,000 lb capacity.',
+    0, 0, 'ET-7X20-2024',
+    'GHI3456', '4HGCM82633D123459',
+    749900, 0, 7, 20,
+    'equipment',
+    datetime('now')
+  ),
+  (
+    'clt1234567894',
+    'Enclosed Cargo 6x12',
+    'Enclosed cargo trailer with side door and LED lighting. Perfect for business use.',
+    1, 0, 'EC-6X12-2024',
+    'JKL7890', '5HGCM82633E123460',
+    499900, 0, 6, 12,
+    'enclosed',
+    datetime('now')
+  ),
+  (
+    'clt1234567895',
+    'Landscape Trailer 6x14',
+    'Open landscape trailer with fold-down gate and rail-top sides.',
+    1, 0, 'LT-6X14-2024',
+    'MNO1234', '6HGCM82633F123461',
+    399900, 0, 6, 14,
+    'landscape',
+    datetime('now')
+  ),
+  (
+    'clt1234567896',
+    'Gooseneck Trailer 8x25',
+    'Heavy-duty gooseneck trailer with hydraulic dovetail and 25,000 lb capacity.',
+    1, 0, 'GN-8X25-2024',
+    'PQR5678', '7HGCM82633G123462',
+    1299900, 0, 8, 25,
+    'gooseneck',
+    datetime('now')
+  ),
+  (
+    'clt1234567897',
+    'ATV Trailer 5x10',
+    'Compact ATV/UTV trailer with fold-down gate and tie-down points.',
+    1, 0, 'AT-5X10-2024',
+    'STU9012', '8HGCM82633H123463',
+    349900, 0, 5, 10,
+    'atv',
+    datetime('now')
+  ),
+  (
+    'clt1234567898',
+    'Tilt Deck 7x18',
+    'Hydraulic tilt deck trailer for easy loading of low-clearance vehicles.',
+    1, 0, 'TD-7X18-2024',
+    'VWX3456', '9HGCM82633I123464',
+    849900, 10, 7, 18,
+    'tilt',
+    datetime('now')
+  ),
+  (
+    'clt1234567899',
+    'Flatbed Trailer 8x20',
+    'Heavy-duty flatbed with stake pockets and treated wood deck.',
+    1, 0, 'FB-8X20-2024',
+    'YZA7890', '0HGCM82633J123465',
+    699900, 0, 8, 20,
+    'flatbed',
+    datetime('now')
+  );

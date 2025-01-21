@@ -41,3 +41,36 @@ model ShedMedia {
 
   @@index([shedId])
 }
+
+model Trailer {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  isNew       Boolean        @default(true)
+  isSold      Boolean        @default(false)
+  modelNumber String
+  plateNumber String
+  vin         String
+  price       Int
+  salePercent Int            @default(0)
+  sizeWidth   Int
+  sizeLength  Int
+  trailerType String
+  createdAt   DateTime       @default(dbgenerated("CURRENT_TIMESTAMP"))
+  media       TrailerMedia[]
+  isDeleted   Boolean        @default(false)
+}
+
+model TrailerMedia {
+  id        String   @id @default(cuid())
+  path      String
+  isPrimary Boolean  @default(false)
+  isPhoto   Boolean  @default(false)
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP"))
+  isDeleted Boolean  @default(false)
+
+  trailer   Trailer @relation(fields: [trailerId], references: [id], onDelete: Cascade)
+  trailerId String
+
+  @@index([trailerId])
+}
