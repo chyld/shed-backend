@@ -5,9 +5,6 @@ import { getServerSession } from "next-auth";
 
 export default async function ShedListPage() {
   const sheds = await prisma.shed.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
     include: {
       media: {
         where: {
@@ -15,6 +12,10 @@ export default async function ShedListPage() {
         },
       },
     },
+    orderBy: [
+      { isDeleted: "asc" }, // Show non-deleted sheds first
+      { createdAt: "desc" }, // Then sort by creation date within each group
+    ],
   });
   const session = await getServerSession();
   const isLoggedIn = !!session;
