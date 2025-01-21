@@ -3,13 +3,18 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 
-export default async function ShedListPage({ searchParams }: { searchParams: { showSold?: string } }) {
+export default async function ShedListPage({ searchParams }: { searchParams: { showSold?: string; width?: string; length?: string } }) {
   const params = await Promise.resolve(searchParams);
   const showSold = params.showSold === "true";
+  const width = params.width ? parseInt(params.width) : undefined;
+  const length = params.length ? parseInt(params.length) : undefined;
 
   const sheds = await prisma.shed.findMany({
     where: {
-      isSold: showSold ? undefined : false, // Only filter if not showing sold items
+      isSold: showSold ? undefined : false,
+      ...((width || length) && {
+        AND: [...(width && length ? [{ sizeWidth: width }, { sizeLength: length }] : [...(width ? [{ sizeWidth: width }] : []), ...(length ? [{ sizeLength: length }] : [])])],
+      }),
     },
     include: {
       media: {
@@ -28,7 +33,7 @@ export default async function ShedListPage({ searchParams }: { searchParams: { s
 
   return (
     <div className={styles.container}>
-      <div style={{ marginBottom: "20px", display: "flex", gap: "20px", alignItems: "center" }}>
+      <div style={{ marginBottom: "20px", display: "flex", gap: "20px", alignItems: "center", flexWrap: "wrap" }}>
         <Link
           href="/sheds/new"
           style={{
@@ -42,9 +47,73 @@ export default async function ShedListPage({ searchParams }: { searchParams: { s
         >
           Create New Shed
         </Link>
+
+        <form style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <label htmlFor="width">Width:</label>
+            <input
+              type="number"
+              id="width"
+              name="width"
+              defaultValue={width}
+              style={{
+                padding: "4px 8px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                width: "70px",
+              }}
+            />
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <label htmlFor="length">Length:</label>
+            <input
+              type="number"
+              id="length"
+              name="length"
+              defaultValue={length}
+              style={{
+                padding: "4px 8px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                width: "70px",
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            style={{
+              padding: "4px 12px",
+              backgroundColor: "#2196F3",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Search Size
+          </button>
+
+          {(width || length) && (
+            <Link
+              href="/sheds"
+              style={{
+                padding: "4px 12px",
+                backgroundColor: "#f44336",
+                color: "white",
+                textDecoration: "none",
+                borderRadius: "4px",
+              }}
+            >
+              Clear
+            </Link>
+          )}
+        </form>
+
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <Link
-            href={`/sheds?showSold=${!showSold}`}
+            href={`/sheds?showSold=${!showSold}${width ? `&width=${width}` : ""}${length ? `&length=${length}` : ""}`}
             style={{
               display: "flex",
               alignItems: "center",
