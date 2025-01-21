@@ -116,6 +116,7 @@ export default async function ShedListPage() {
                       </a>
                       {shed.title}
                       {shed.isNew && <span className={styles.newBadge}>New</span>}
+                      {!shed.isNew && <span className={styles.repoBadge}>Repo</span>}
                       {shed.isSold && <span className={styles.soldBadge}>Sold</span>}
                     </div>
                   </div>

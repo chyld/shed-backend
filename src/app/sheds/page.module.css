@@ -130,3 +130,13 @@
 .deletedRow {
   background-color: #ffebee;
 }
+
+.repoBadge {
+  background-color: #ff9800;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  margin-left: 8px;
+  display: inline-block;
+}
