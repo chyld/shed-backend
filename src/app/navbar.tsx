@@ -39,6 +39,16 @@ export function NavBar() {
         <Link href="/sheds" style={linkStyle}>
           Shed Inventory
         </Link>
+        <Link
+          href="/trailers"
+          style={{
+            padding: "8px 16px",
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          Trailer Inventory
+        </Link>
       </div>
       <div>
         {status === "authenticated" ? (
