@@ -1,0 +1,132 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { use } from "react";
+
+interface Media {
+  id: string;
+  trailerId: string;
+  path: string;
+  isPhoto: boolean;
+  isPrimary: boolean;
+}
+
+export default function TrailerMediaPage({ params }: { params: Promise<{ trailerId: string }> }) {
+  const resolvedParams = use(params);
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [media, setMedia] = useState<Media[]>([]);
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    fetchMedia();
+  }, []);
+
+  const fetchMedia = async () => {
+    const response = await fetch(`/api/trailers/${resolvedParams.trailerId}/media`);
+    const data = await response.json();
+    setMedia(data);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    const formData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files", files[i]);
+    }
+
+    try {
+      const response = await fetch(`/api/trailers/${resolvedParams.trailerId}/media`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Upload failed");
+
+      await fetchMedia();
+      setFiles(null);
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      console.error("Upload error:", error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleMediaClick = async (mediaId: string) => {
+    try {
+      const response = await fetch(`/api/trailers/${resolvedParams.trailerId}/media`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mediaId }),
+      });
+
+      if (!response.ok) throw new Error("Update failed");
+      await fetchMedia();
+    } catch (error) {
+      console.error("Update error:", error);
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ marginBottom: "20px" }}>Trailer Media Manager</h1>
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: "30px" }}>
+        <input type="file" multiple accept="image/*,video/*" onChange={(e) => setFiles(e.target.files)} style={{ marginBottom: "10px", display: "block" }} />
+        <button
+          type="submit"
+          disabled={!files || uploading}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: uploading ? "#ccc" : "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: uploading ? "not-allowed" : "pointer",
+          }}
+        >
+          {uploading ? "Uploading..." : "Upload Files"}
+        </button>
+      </form>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
+        {media.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => handleMediaClick(item.id)}
+            style={{
+              border: item.isPrimary ? "2px solid #007bff" : "1px solid #ddd",
+              padding: "10px",
+              cursor: "pointer",
+              position: "relative",
+            }}
+          >
+            {item.isPrimary && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: 5,
+                  right: 5,
+                  background: "#007bff",
+                  color: "white",
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                  fontSize: "0.8em",
+                }}
+              >
+                Primary
+              </div>
+            )}
+            {item.isPhoto ? <img src={item.path} alt="Trailer media" style={{ width: "100%", height: "auto" }} /> : <video controls src={item.path} style={{ width: "100%", height: "auto" }} />}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
