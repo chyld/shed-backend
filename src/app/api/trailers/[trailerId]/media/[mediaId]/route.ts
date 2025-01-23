@@ -31,7 +31,10 @@ export async function PATCH(request: Request, context: { params: Promise<{ trail
     });
 
     return NextResponse.json(media);
-  } catch (error) {
-    return new NextResponse("Error updating media", { status: 500 });
+  } catch (e) {
+    if (e instanceof Error) {
+      return NextResponse.json({ message: e.message }, { status: 500 });
+    }
+    return NextResponse.json({ message: "An unknown error occurred" }, { status: 500 });
   }
 }

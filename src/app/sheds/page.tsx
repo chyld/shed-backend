@@ -2,18 +2,27 @@ import styles from "./page.module.css";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
+import Image from "next/image";
 
-export default async function ShedListPage({ searchParams }: { searchParams: { showSold?: string; width?: string; length?: string } }) {
-  const params = await Promise.resolve(searchParams);
-  const showSold = params.showSold === "true";
-  const width = params.width ? parseInt(params.width) : undefined;
-  const length = params.length ? parseInt(params.length) : undefined;
+interface PageProps {
+  searchParams: Promise<{
+    showSold?: string;
+    width?: string;
+    length?: string;
+  }>;
+}
+
+export default async function ShedListPage({ searchParams }: PageProps) {
+  const resolvedParams = await searchParams;
+  const showSold = resolvedParams.showSold === "true";
+  const width = resolvedParams.width ? parseInt(resolvedParams.width) : undefined;
+  const length = resolvedParams.length ? parseInt(resolvedParams.length) : undefined;
 
   const sheds = await prisma.shed.findMany({
     where: {
       isSold: showSold ? undefined : false,
       ...((width || length) && {
-        AND: [...(width && length ? [{ sizeWidth: width }, { sizeLength: length }] : [...(width ? [{ sizeWidth: width }] : []), ...(length ? [{ sizeLength: length }] : [])])],
+        AND: [...(width ? [{ sizeWidth: width }] : []), ...(length ? [{ sizeLength: length }] : [])],
       }),
     },
     include: {
@@ -155,16 +164,7 @@ export default async function ShedListPage({ searchParams }: { searchParams: { s
                     {shed.media[0] && (
                       <div style={{ width: "50px", height: "50px", flexShrink: 0 }}>
                         {shed.media[0].isPhoto ? (
-                          <img
-                            src={shed.media[0].path}
-                            alt="Primary media"
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                              borderRadius: "4px",
-                            }}
-                          />
+                          <Image src={shed.media[0].path} alt="Primary media" width={500} height={300} />
                         ) : (
                           <video
                             src={shed.media[0].path}

@@ -18,8 +18,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       },
     });
     return NextResponse.json(media);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch media" }, { status: 500 });
+  } catch (e) {
+    if (e instanceof Error) {
+      return NextResponse.json({ message: e.message }, { status: 500 });
+    }
+    return NextResponse.json({ message: "An unknown error occurred" }, { status: 500 });
   }
 }
 
@@ -33,7 +36,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const publicPath = path.join(process.cwd(), "public", "uploads");
     await mkdir(publicPath, { recursive: true });
 
-    const uploadPromises = files.map(async (file: any) => {
+    const uploadPromises = files.map(async (file: FormDataEntryValue) => {
+      if (!(file instanceof File)) {
+        throw new Error("Invalid file type");
+      }
+
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 

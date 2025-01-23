@@ -4,7 +4,7 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 
 export function NavBar() {
-  const { data: session, status } = useSession();
+  const { data } = useSession();
 
   const navStyle = {
     padding: "1rem",
@@ -51,7 +51,7 @@ export function NavBar() {
         </Link>
       </div>
       <div>
-        {status === "authenticated" ? (
+        {data ? (
           <button onClick={() => signOut()} style={buttonStyle}>
             Logout
           </button>

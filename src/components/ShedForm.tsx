@@ -1,9 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import styles from "./ShedForm.module.css";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+
+interface ProcessedFormData {
+  title: string;
+  description: string;
+  basePrice: number;
+  optionsPrice: number;
+  salePercent: number;
+  sizeWidth: number;
+  sizeLength: number;
+  colorRoof: string;
+  colorSiding: string;
+  colorTrim: string;
+  shedType: string;
+  isNew: boolean;
+  isSold: boolean;
+  isDeleted: boolean;
+  inventoryNumber: string;
+}
 
 interface ShedFormProps {
   initialData?: {
@@ -24,14 +41,32 @@ interface ShedFormProps {
     colorTrim: string;
     shedType: string;
   };
-  onSubmit: (data: any) => void;
+  onSubmit: (data: ProcessedFormData) => void;
   isLoading?: boolean;
+}
+
+interface FormData {
+  title: string;
+  description: string;
+  basePrice: string;
+  optionsPrice: string;
+  salePercent: string;
+  sizeWidth: string;
+  sizeLength: string;
+  colorRoof: string;
+  colorSiding: string;
+  colorTrim: string;
+  shedType: string;
+  isNew: boolean;
+  isSold: boolean;
+  isDeleted: boolean;
+  inventoryNumber: string;
 }
 
 export default function ShedForm({ initialData, onSubmit, isLoading }: ShedFormProps) {
   const router = useRouter();
 
-  const form = useForm({
+  const form = useForm<FormData>({
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
@@ -41,9 +76,9 @@ export default function ShedForm({ initialData, onSubmit, isLoading }: ShedFormP
       inventoryNumber: initialData?.inventoryNumber || "",
       basePrice: initialData ? (initialData.basePrice / 100).toFixed(2) : "",
       optionsPrice: initialData ? (initialData.optionsPrice / 100).toFixed(2) : "",
-      salePercent: initialData?.salePercent || 0,
-      sizeWidth: initialData?.sizeWidth || 0,
-      sizeLength: initialData?.sizeLength || 0,
+      salePercent: (initialData?.salePercent || 0).toString(),
+      sizeWidth: (initialData?.sizeWidth || 0).toString(),
+      sizeLength: (initialData?.sizeLength || 0).toString(),
       colorRoof: initialData?.colorRoof || "",
       colorSiding: initialData?.colorSiding || "",
       colorTrim: initialData?.colorTrim || "",
@@ -51,7 +86,7 @@ export default function ShedForm({ initialData, onSubmit, isLoading }: ShedFormP
     },
   });
 
-  const onSubmitForm = async (data: any) => {
+  const onSubmitForm = async (data: FormData) => {
     const formData = {
       ...data,
       basePrice: Math.round(parseFloat(data.basePrice) * 100),

@@ -1,10 +1,12 @@
-import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import ShedForm from "@/components/ShedForm";
 
-export default async function EditShedPage({ params }: { params: Promise<{ id: string }> | { id: string } }) {
-  // Await the params if it's a promise
-  const resolvedParams = await Promise.resolve(params);
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function EditShedPage({ params }: PageProps) {
+  const resolvedParams = await params;
 
   const shed = await prisma.shed.findUnique({
     where: { id: resolvedParams.id },

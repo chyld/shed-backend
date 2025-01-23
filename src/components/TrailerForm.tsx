@@ -10,28 +10,44 @@ interface TrailerFormProps {
   onSubmit: (data: Partial<Trailer>) => Promise<void>;
 }
 
+interface FormData {
+  title: string;
+  description: string;
+  price: string;
+  salePercent: string;
+  sizeWidth: string;
+  sizeLength: string;
+  modelNumber: string;
+  vin: string;
+  plateNumber: string;
+  trailerType: string;
+  isNew: boolean;
+  isSold: boolean;
+  isDeleted: boolean;
+}
+
 export default function TrailerForm({ trailer, onSubmit }: TrailerFormProps) {
   const router = useRouter();
 
-  const form = useForm({
+  const form = useForm<FormData>({
     defaultValues: {
       title: trailer?.title || "",
       description: trailer?.description || "",
+      price: trailer ? (trailer.price / 100).toFixed(2) : "",
+      salePercent: (trailer?.salePercent || 0).toString(),
+      sizeWidth: (trailer?.sizeWidth || 0).toString(),
+      sizeLength: (trailer?.sizeLength || 0).toString(),
       modelNumber: trailer?.modelNumber || "",
       vin: trailer?.vin || "",
       plateNumber: trailer?.plateNumber || "",
-      sizeWidth: trailer?.sizeWidth || 0,
-      sizeLength: trailer?.sizeLength || 0,
-      price: trailer ? (trailer.price / 100).toFixed(2) : "",
-      salePercent: trailer?.salePercent || 0,
+      trailerType: trailer?.trailerType || "",
       isNew: trailer?.isNew ?? true,
       isSold: trailer?.isSold ?? false,
       isDeleted: trailer?.isDeleted ?? false,
-      trailerType: trailer?.trailerType || "",
     },
   });
 
-  const onSubmitForm = async (data: any) => {
+  const onSubmitForm = async (data: FormData) => {
     try {
       const formData = {
         ...data,

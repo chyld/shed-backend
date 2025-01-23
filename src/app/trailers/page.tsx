@@ -3,17 +3,25 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 
-export default async function TrailerListPage({ searchParams }: { searchParams: { showSold?: string; width?: string; length?: string } }) {
-  const params = await Promise.resolve(searchParams);
-  const showSold = params.showSold === "true";
-  const width = params.width ? parseInt(params.width) : undefined;
-  const length = params.length ? parseInt(params.length) : undefined;
+interface PageProps {
+  searchParams: Promise<{
+    showSold?: string;
+    width?: string;
+    length?: string;
+  }>;
+}
+
+export default async function TrailerListPage({ searchParams }: PageProps) {
+  const resolvedParams = await searchParams;
+  const showSold = resolvedParams.showSold === "true";
+  const width = resolvedParams.width ? parseInt(resolvedParams.width) : undefined;
+  const length = resolvedParams.length ? parseInt(resolvedParams.length) : undefined;
 
   const trailers = await prisma.trailer.findMany({
     where: {
       isSold: showSold ? undefined : false,
       ...((width || length) && {
-        AND: [...(width && length ? [{ sizeWidth: width }, { sizeLength: length }] : [...(width ? [{ sizeWidth: width }] : []), ...(length ? [{ sizeLength: length }] : [])])],
+        AND: [...(width ? [{ sizeWidth: width }] : []), ...(length ? [{ sizeLength: length }] : [])],
       }),
     },
     include: {

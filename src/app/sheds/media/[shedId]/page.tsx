@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { use } from "react";
 
 interface Media {
@@ -18,15 +18,15 @@ export default function ShedMediaPage({ params }: { params: Promise<{ shedId: st
   const [media, setMedia] = useState<Media[]>([]);
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    fetchMedia();
-  }, []);
-
-  const fetchMedia = async () => {
+  const fetchMedia = useCallback(async () => {
     const response = await fetch(`/api/sheds/${resolvedParams.shedId}/media`);
     const data = await response.json();
     setMedia(data);
-  };
+  }, [resolvedParams.shedId]);
+
+  useEffect(() => {
+    fetchMedia();
+  }, [fetchMedia]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
