@@ -54,7 +54,6 @@ export default function TrailerForm({ trailer, onSubmit }: TrailerFormProps) {
       router.push("/trailers");
     } catch (error) {
       console.error("Form submission error:", error);
-      alert(`Error creating trailer: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   };
 
