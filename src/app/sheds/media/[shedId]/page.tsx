@@ -9,6 +9,7 @@ interface Media {
   path: string;
   isPhoto: boolean;
   isPrimary: boolean;
+  isDeleted: boolean;
 }
 
 export default function ShedMediaPage({ params }: { params: Promise<{ shedId: string }> }) {
@@ -57,6 +58,25 @@ export default function ShedMediaPage({ params }: { params: Promise<{ shedId: st
   };
 
   const handleMediaClick = async (mediaId: string) => {
+    const mediaItem = media.find((m) => m.id === mediaId);
+    if (!mediaItem) return;
+
+    // If media is deleted, handle undelete via the delete endpoint
+    if (mediaItem.isDeleted) {
+      const response = await fetch(`/api/sheds/${resolvedParams.shedId}/media/${mediaId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        await fetchMedia();
+      }
+      return;
+    }
+
+    // Handle setting primary (only for non-deleted media)
     try {
       const response = await fetch(`/api/sheds/${resolvedParams.shedId}/media`, {
         method: "PATCH",
@@ -70,6 +90,22 @@ export default function ShedMediaPage({ params }: { params: Promise<{ shedId: st
       await fetchMedia();
     } catch (error) {
       console.error("Update error:", error);
+    }
+  };
+
+  const handleDelete = async (mediaId: string) => {
+    const response = await fetch(`/api/sheds/${resolvedParams.shedId}/media/${mediaId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      // Refresh the media list instead of filtering
+      await fetchMedia();
+    } else {
+      alert("Error deleting media");
     }
   };
 
@@ -101,13 +137,14 @@ export default function ShedMediaPage({ params }: { params: Promise<{ shedId: st
             key={item.id}
             onClick={() => handleMediaClick(item.id)}
             style={{
-              border: item.isPrimary ? "2px solid #007bff" : "1px solid #ddd",
+              border: item.isDeleted ? "3px solid #ff0000" : item.isPrimary ? "2px solid #007bff" : "1px solid #ddd",
               padding: "10px",
               cursor: "pointer",
               position: "relative",
+              opacity: item.isDeleted ? 0.7 : 1,
             }}
           >
-            {item.isPrimary && (
+            {item.isPrimary && !item.isDeleted && (
               <div
                 style={{
                   position: "absolute",
@@ -123,10 +160,61 @@ export default function ShedMediaPage({ params }: { params: Promise<{ shedId: st
                 Primary
               </div>
             )}
+            {item.isDeleted && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: 5,
+                  right: 5,
+                  background: "#ff0000",
+                  color: "white",
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                  fontSize: "0.8em",
+                }}
+              >
+                Deleted
+              </div>
+            )}
+            {!item.isDeleted && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(item.id);
+                }}
+                className="delete-button"
+              >
+                Delete
+              </button>
+            )}
             {item.isPhoto ? <img src={item.path} alt="Shed media" style={{ width: "100%", height: "auto" }} /> : <video controls src={item.path} style={{ width: "100%", height: "auto" }} />}
           </div>
         ))}
       </div>
+
+      <style jsx>{`
+        .delete-button {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          z-index: 10;
+          background-color: red;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .delete-button:hover {
+          background-color: darkred;
+        }
+        img,
+        video {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+        }
+      `}</style>
     </div>
   );
 }
