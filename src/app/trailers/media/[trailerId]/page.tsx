@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { use } from "react";
+import Image from "next/image";
 
 interface Media {
   id: string;
@@ -186,7 +187,11 @@ export default function TrailerMediaPage({ params }: { params: Promise<{ trailer
                 Delete
               </button>
             )}
-            {item.isPhoto ? <img src={item.path} alt="Trailer media" style={{ width: "100%", height: "auto" }} /> : <video controls src={item.path} style={{ width: "100%", height: "auto" }} />}
+            {item.isPhoto ? (
+              <Image src={item.path} alt={`Trailer image ${item.id}`} width={300} height={200} style={{ objectFit: "cover" }} priority={false} />
+            ) : (
+              <video controls src={item.path} style={{ width: "100%", height: "auto" }} />
+            )}
           </div>
         ))}
       </div>
