@@ -2,7 +2,6 @@ import styles from "./page.module.css";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
-import Image from "next/image";
 
 interface PageProps {
   searchParams: Promise<{
@@ -155,29 +154,34 @@ export default async function TrailerListPage({ searchParams }: PageProps) {
           <tbody>
             {trailers.map((trailer) => (
               <tr key={trailer.id} className={`${styles.tableRow} ${trailer.isDeleted ? styles.deletedRow : ""}`}>
+                
+
+
+
+
+
+
+
+
+
+
                 <td className={styles.td}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    {trailer.media && trailer.media.some((m) => m.isPrimary && !m.isDeleted) ? (
-                      <Image
-                        src={trailer.media.find((m) => m.isPrimary && !m.isDeleted)?.path || ""}
-                        alt={`${trailer.title} primary image`}
-                        width={300}
-                        height={200}
-                        style={{ objectFit: "cover" }}
-                        priority={false}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: "100%",
-                          height: "200px",
-                          backgroundColor: "#f0f0f0",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        No Image
+                    {trailer.media[0] && (
+                      <div style={{ width: "50px", height: "50px", flexShrink: 0 }}>
+                        {trailer.media[0].isPhoto ? (
+                          <img src={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${trailer.media[0].path}`} alt="Primary media" width={100} height={50} />
+                        ) : (
+                          <video
+                          src={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${trailer.media[0].path}`}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "4px",
+                            }}
+                          />
+                        )}
                       </div>
                     )}
                     <div>
@@ -218,6 +222,16 @@ export default async function TrailerListPage({ searchParams }: PageProps) {
                   <br />
                   <span className={styles.description}>{trailer.description}</span>
                 </td>
+
+
+
+
+
+
+
+
+
+
                 <td className={styles.td}>{trailer.modelNumber}</td>
                 <td className={styles.td}>{trailer.vin}</td>
                 <td className={styles.td}>{trailer.plateNumber}</td>

@@ -2,7 +2,6 @@ import styles from "./page.module.css";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
-import Image from "next/image";
 
 interface PageProps {
   searchParams: Promise<{
@@ -159,15 +158,22 @@ export default async function ShedListPage({ searchParams }: PageProps) {
           <tbody>
             {sheds.map((shed) => (
               <tr key={shed.id} className={`${styles.tableRow} ${shed.isDeleted ? styles.deletedRow : ""}`}>
+                
+                
+                
+                
+                
+                
+                
                 <td className={styles.td}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     {shed.media[0] && (
                       <div style={{ width: "50px", height: "50px", flexShrink: 0 }}>
                         {shed.media[0].isPhoto ? (
-                          <Image src={shed.media[0].path} alt="Primary media" width={500} height={300} />
+                          <img src={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${shed.media[0].path}`} alt="Primary media" width={100} height={50} />
                         ) : (
                           <video
-                            src={shed.media[0].path}
+                          src={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${shed.media[0].path}`}
                             style={{
                               width: "100%",
                               height: "100%",
@@ -216,6 +222,10 @@ export default async function ShedListPage({ searchParams }: PageProps) {
                   <br />
                   <span className={styles.description}>{shed.description}</span>
                 </td>
+
+
+
+
                 <td className={styles.td}>{shed.inventoryNumber}</td>
                 <td className={styles.td}>{`${shed.sizeWidth}x${shed.sizeLength}`}</td>
                 <td className={`${styles.td} ${styles.priceCell}`}>${(shed.basePrice / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
